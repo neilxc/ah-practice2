@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +41,9 @@ namespace Application.Activities
                 var activity = await context.Activities
                     .Include(x => x.GeoCoordinate)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
+
+                if (activity == null)
+                    throw new RestException(HttpStatusCode.NotFound, new {Activity = "Not found"});
 
                 activity.Title = request.Activity.Title ?? activity.Title;
                 activity.Description = request.Activity.Description ?? activity.Description;
