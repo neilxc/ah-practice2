@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Values;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,6 +32,7 @@ namespace API
       {
         c.UseSqlite(_config.GetConnectionString("DefaultConnection"));
       });
+      services.AddMediatR(typeof(List.Handler).Assembly);
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
     }
 
