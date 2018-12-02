@@ -1,51 +1,38 @@
 using System.Threading.Tasks;
 using Application.Activities;
+using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-  [ApiController]
-  [Route("api/[controller]")]
-  public class ActivitiesController : ControllerBase
+  public class ActivitiesController : BaseController
   {
-    private readonly IMediator mediator;
-    public ActivitiesController(IMediator mediator)
-    {
-      this.mediator = mediator;
-    }
-
     [HttpPost]
     public async Task<IActionResult> Create(Create.Command command)
     {
-        var response = await mediator.Send(command);
+        var response = await Mediator.Send(command);
 
         return Ok(response);
     }
 
     [HttpGet]
-    public async Task<IActionResult> List()
+    public async Task<ActivitiesEnvelope> List()
     {
-        var activities = await mediator.Send(new List.Query());
-
-        return Ok(activities);
+        return await Mediator.Send(new List.Query());
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Details(int id)
+    public async Task<Activity> Details(int id)
     {
-        var activity = await mediator.Send(new Details.Query{Id = id});
-
-        return Ok(activity);
+        return await Mediator.Send(new Details.Query{Id = id});
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Edit(int id, Edit.Command command)
+    public async Task<Activity> Edit(int id, Edit.Command command)
     {
         command.Id = id;
-        var activity = await mediator.Send(command);
-
-        return Ok(activity);
+        return await Mediator.Send(command);
     }
   }
 }
