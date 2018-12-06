@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Application.Interfaces;
 using Application.Values;
+using AutoMapper;
 using Domain;
 using FluentValidation.AspNetCore;
 using Infrastructure;
@@ -63,10 +64,20 @@ namespace API
           };
         });
 
+      services.AddAuthorization(opt =>
+      {
+        opt.AddPolicy("IsActivityHost", policy => 
+        {
+          policy.Requirements.Add(new IsHostRequirement());
+        });
+      });
+      services.AddTransient<IAuthorizationHandler, IsHostHandler>();
+
       services.AddScoped<IJwtGenerator, JwtGenerator>();
       services.AddScoped<IUserAccessor, UserAccessor>();
 
       services.AddMediatR(typeof(List.Handler).Assembly);
+      services.AddAutoMapper();
       services.AddMvc(opt =>
       {
         var policy = new AuthorizationPolicyBuilder()
