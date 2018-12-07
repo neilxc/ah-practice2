@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Interfaces;
+using Application.Profiles;
 using Application.Values;
 using AutoMapper;
 using Domain;
@@ -75,6 +76,7 @@ namespace API
 
       services.AddScoped<IJwtGenerator, JwtGenerator>();
       services.AddScoped<IUserAccessor, UserAccessor>();
+      services.AddScoped<IProfileReader, ProfileReader>();
 
       services.AddMediatR(typeof(List.Handler).Assembly);
       services.AddAutoMapper();
