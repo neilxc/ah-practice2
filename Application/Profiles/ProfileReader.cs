@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Application.Errors;
@@ -31,6 +32,14 @@ namespace Application.Profiles
                 throw new RestException(HttpStatusCode.NotFound, new {User = "Not found"});
             
             var profile = mapper.Map<AppUser, Profile>(user);
+
+            var currentUser = await context.Users
+                .Include(x => x.Following)
+                .Include(x => x.Followers)
+                .FirstOrDefaultAsync(x => x.UserName == currentUserName);
+            
+            if (currentUser.Followers.Any(x => x.TargetId == user.Id))
+                profile.IsFollowed = true;
 
             return profile;
         }
