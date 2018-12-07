@@ -9,5 +9,6 @@ namespace Domain
         public ICollection<ActivityAttendee> Activities { get; set; }
         public ICollection<FollowedPeople> Following { get; set; }
         public ICollection<FollowedPeople> Followers { get; set; }
+        public ICollection<UserPhoto> UserPhotos { get; set; }
     }
 }
