@@ -25,7 +25,9 @@ namespace Application.Profiles
         {
             var currentUserName = userAccessor.GetCurrentUsername();
 
-            var user = await context.Users.AsNoTracking()
+            var user = await context.Users
+                .AsNoTracking()
+                .Include(p => p.UserPhotos)
                 .FirstOrDefaultAsync(x => x.UserName == username);
 
             if (user == null)

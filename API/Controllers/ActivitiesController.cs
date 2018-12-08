@@ -18,9 +18,9 @@ namespace API.Controllers
     }
 
     [HttpGet]
-    public async Task<ActivitiesEnvelope> List()
+    public async Task<ActivitiesEnvelope> List(string sort, string username, int? limit, int? offset)
     {
-        return await Mediator.Send(new List.Query());
+        return await Mediator.Send(new List.Query(sort, username, limit, offset));
     }
 
     [HttpGet("{id}", Name = "GetActivity")]
